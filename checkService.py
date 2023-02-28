@@ -8,7 +8,7 @@ alexLastOnlineTime = time.time()
 
 
 def checkWhoIsHome():
-    devices = sns.checkwhoIsHome()
+    devices = sns.checkWhoIsHome()
     maxIsHome = len(devices[0]) > 0
     alexIsHome = len(devices[1]) > 0
 
