@@ -9,16 +9,26 @@ def getHtml():
         lines = handle.readlines()
     return lines
 
+def checkHomeFiles():
+    with open('max.bool', 'r') as handle:
+        maxOnline = bool(handle.readline())
+    with open('alex.bool', 'r') as handle:
+        alexOnline = bool(handle.readline())
+    return maxOnline, alexOnline
+        
+
 class MyServer(BaseHTTPRequestHandler):
 
     def do_GET(self):
-        
-        whoIsHome = sns.checkWhoIsHome()
-
+        maxOnline, alexOnline = checkHomeFiles()
         htmlFile = getHtml()
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
+        if maxOnline:
+            self.wfile.write(bytes('<p id="title" Maexchen ist Home</p>', 'utf-8'))
+        if alexOnline:
+            self.wfile.write(bytes('<p id="title">Alex ist Home</p>', 'utf-8'))
         for line in htmlFile:
             self.wfile.write(bytes(line, 'utf-8'))
         '''
