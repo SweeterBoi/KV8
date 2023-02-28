@@ -19,7 +19,7 @@ def writeToFile(filename, value):
         handle.write(str(value))
 
 def parseOnlineTime(name, value, lastOnlineTime):
-    print(f'writing {value} for {name} and {abs(lastOnlineTime-time.time())}')
+    print(f'writing {value and abs(lastOnlineTime-time.time()) > threshold} for {name} and {abs(lastOnlineTime-time.time())}')
     if not value and abs(lastOnlineTime-time.time()) > threshold:
         writeToFile(name, False)
     elif value:
