@@ -25,7 +25,7 @@ def parseOnlineTime(name, value, lastOnlineTime):
     elif value:
         writeToFile(name, True)
         lastOnlineTime = time.time()
-        return lastOnlineTime
+    return lastOnlineTime
 
 
 if __name__ == '__main__':
