@@ -3,8 +3,8 @@ import simpleNetworkScanner as sns
 
 threshold = 600 # threshold in seconds
 
-maxLastOnlineTime = time.time()
-alexLastOnlineTime = time.time()
+maxLastOnlineTime = 0.0
+alexLastOnlineTime = 0.0
 
 
 def checkWhoIsHome():
@@ -19,6 +19,7 @@ def writeToFile(filename, value):
         handle.write(str(value))
 
 def parseOnlineTime(name, value, lastOnlineTime):
+    print(f'writing {value} for {name}')
     if not value and abs(lastOnlineTime-time.time()) > threshold:
         writeToFile(name, False)
     elif value:
