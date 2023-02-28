@@ -31,6 +31,7 @@ if __name__ == '__main__':
 
     try:
         while True:
+            print('Checking Who is home...', time.time())
             maxBool, alexBool = checkWhoIsHome()
             maxLastOnlineTime = parseOnlineTime('max', maxBool, maxLastOnlineTime)
             alexLastOnlineTime = parseOnlineTime('alex', alexBool, alexLastOnlineTime)
