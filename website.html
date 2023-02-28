@@ -2,24 +2,49 @@
 <html>
 
 <head>
-    ><style>
+    <style>
         :root {
             --background: #2C363F;
             --accentRed: #E75A7C;
             --content: #EDF2EF;
+            --contentTransparent: rgb(237,242,239,.6);
             --accentYellow: #FEA82F;
-            --sccentBlue: #3F88C5;
+            --accentBlue: #3F88C5;
         }
 
         body {
-            background-color: var(--background);
+            background-color: var(--accentRed);
+            background-image: url("https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg");
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
+            padding: 5%;
+        }
+
+        #mainField {
+            background-color: var(--contentTransparent);
+            border: 8px solid var(--accentBlue);
+            border-radius: 1px;
+            padding: 10%;
+            width: 80%;
+            height: 80%;
+            
+
+        }
+        #title {
+            text-align: center;
+            font-size: 300%;
+            font-weight: 300;
+            color: var(--accentBlue);
         }
     </style>
     <link rel="stylesheet" href="stylesheet.css">
 </head>
 
 <body>
-    <p>Who even is a home? Right?</p>
+    <div id="mainField">
+        <p id="title">Who even is a home? Right?</p>
+    </div>
 </body>
 
 </html>
