@@ -36,7 +36,7 @@ if __name__ == '__main__':
             maxBool, alexBool = checkWhoIsHome()
             maxLastOnlineTime = parseOnlineTime('max', maxBool, maxLastOnlineTime)
             alexLastOnlineTime = parseOnlineTime('alex', alexBool, alexLastOnlineTime)
-            time.sleep(30)
+            time.sleep(10)
             
     except KeyboardInterrupt:
         pass
