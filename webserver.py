@@ -14,9 +14,9 @@ def getHtml():
 
 def checkHomeFiles():
     with open('max.bool', 'r') as handle:
-        maxOnline = handle.readline() == 'True'
+        maxOnline = handle.readline().startswith('True')
     with open('alex.bool', 'r') as handle:
-        alexOnline = handle.readline() == 'True'
+        alexOnline = handle.readline().startswith('True')
     return maxOnline, alexOnline
         
 
