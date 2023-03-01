@@ -26,22 +26,12 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-type', 'text/html')
         self.end_headers()
-        if maxOnline:
-            self.wfile.write(bytes('<p id="title" Maexchen ist Home</p>', 'utf-8'))
-        if alexOnline:
-            self.wfile.write(bytes('<p id="title">Alex ist Home</p>', 'utf-8'))
         for index, line in enumerate(htmlFile):
             if maxOnline and index == insertLine:
-                self.wfile.write(bytes('<p id="title" Maexchen ist Home</p>', 'utf-8'))
+                self.wfile.write(bytes('<p id="title">Maexchen ist Home</p>', 'utf-8'))
             if alexOnline and index == insertLine:
-                self.wfile.write(bytes('<p id="title">Alex ist Home</p>', 'utf-8'))
+                self.wfile.write(bytes('<p id="title>Alex ist Home</p>', 'utf-8'))
             self.wfile.write(bytes(line, 'utf-8'))
-        '''
-        self.wfile.write(bytes('<html><head><title>Who is home?</title></head>', 'utf-8'))
-        self.wfile.write(bytes('<body>','utf-8'))
-        self.wfile.write(bytes(f'<p>{whoIsHome}</p>','utf-8'))
-        self.wfile.write(bytes('</body></html>','utf-8'))
-        '''
 
 
 if __name__ == '__main__':
