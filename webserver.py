@@ -12,11 +12,11 @@ def getHtml():
 
 def checkHomeFiles():
     with open('max.bool', 'r') as handle:
-        print(handle.readline())
-        maxOnline = bool(handle.readline())
+        maxOnline = handle.readline() == 'False'
+        print(maxOnline)
     with open('alex.bool', 'r') as handle:
-        print(handle.readline())
-        alexOnline = bool(handle.readline())
+        alexOnline = handle.readline() == 'False'
+        print(alexOnline)
     return maxOnline, alexOnline
         
 
