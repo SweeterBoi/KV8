@@ -29,8 +29,8 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
         for index, line in enumerate(htmlFile):
-            
-            if line == '<!--Add darkClass, Max-->':
+
+            if line.startswith('<!--Add darkClass, Max-->'):
                 if not maxOnline:
                     self.wfile.write(bytes(darkClass, 'utf-8'))
                 continue
