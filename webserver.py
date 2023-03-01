@@ -30,7 +30,7 @@ class MyServer(BaseHTTPRequestHandler):
             if maxOnline and index == insertLine:
                 self.wfile.write(bytes('<p id="title">Maexchen ist Home</p>', 'utf-8'))
             if alexOnline and index == insertLine:
-                self.wfile.write(bytes('<p id="title>Alex ist Home</p>', 'utf-8'))
+                self.wfile.write(bytes('<p id="title">Alex ist Home</p>', 'utf-8'))
             self.wfile.write(bytes(line, 'utf-8'))
 
 

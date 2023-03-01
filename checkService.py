@@ -1,7 +1,7 @@
 import time
 import simpleNetworkScanner as sns
 
-threshold = 300 # threshold in seconds
+threshold = 100 # threshold in seconds
 
 maxLastOnlineTime = 0.0
 alexLastOnlineTime = 0.0
