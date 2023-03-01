@@ -32,9 +32,10 @@ class MyServer(BaseHTTPRequestHandler):
 
             if line.startswith('<!--Add darkClass, Max-->'):
                 if not maxOnline:
+                    print('maexchen offline')
                     self.wfile.write(bytes(darkClass, 'utf-8'))
                 continue
-            elif line == '<!--Add darkClass, Alex-->':
+            elif line.startswith('<!--Add darkClass, Alex-->'):
                 if not alexOnline:
                     self.wfile.write(bytes(darkClass, 'utf-8'))
                 continue
