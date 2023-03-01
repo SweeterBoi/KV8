@@ -3,6 +3,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 hostName = sns.getIpAdresses()[1][:-3]
 serverPort = 80
+insertLine = 45
 
 def getHtml():
     with open('website.html', 'r') as handle:
@@ -29,7 +30,11 @@ class MyServer(BaseHTTPRequestHandler):
             self.wfile.write(bytes('<p id="title" Maexchen ist Home</p>', 'utf-8'))
         if alexOnline:
             self.wfile.write(bytes('<p id="title">Alex ist Home</p>', 'utf-8'))
-        for line in htmlFile:
+        for index, line in enumerate(htmlFile):
+            if maxOnline and index == insertLine:
+                self.wfile.write(bytes('<p id="title" Maexchen ist Home</p>', 'utf-8'))
+            if alexOnline and index == insertLine:
+                self.wfile.write(bytes('<p id="title">Alex ist Home</p>', 'utf-8'))
             self.wfile.write(bytes(line, 'utf-8'))
         '''
         self.wfile.write(bytes('<html><head><title>Who is home?</title></head>', 'utf-8'))
