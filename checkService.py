@@ -1,7 +1,7 @@
 import time
 import simpleNetworkScanner as sns
 
-threshold = 600 # threshold in seconds
+threshold = 300 # threshold in seconds
 
 maxLastOnlineTime = 0.0
 alexLastOnlineTime = 0.0
@@ -19,7 +19,7 @@ def writeToFile(filename, value):
         handle.write(str(value))
 
 def parseOnlineTime(name, value, lastOnlineTime):
-    print(f'writing {value or not abs(lastOnlineTime-time.time()) > threshold} for {name} and {abs(lastOnlineTime-time.time())}')
+    #print(f'writing {value or not abs(lastOnlineTime-time.time()) > threshold} for {name} and {abs(lastOnlineTime-time.time())}')
     if not value and abs(lastOnlineTime-time.time()) > threshold:
         writeToFile(name, False)
     elif value:
@@ -32,7 +32,7 @@ if __name__ == '__main__':
 
     try:
         while True:
-            print('Checking Who is home...', time.time())
+            #print('Checking Who is home...', time.time())
             maxBool, alexBool = checkWhoIsHome()
             maxLastOnlineTime = parseOnlineTime('max', maxBool, maxLastOnlineTime)
             alexLastOnlineTime = parseOnlineTime('alex', alexBool, alexLastOnlineTime)
