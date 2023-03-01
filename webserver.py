@@ -5,6 +5,8 @@ hostName = sns.getIpAdresses()[1][:-3]
 serverPort = 80
 insertLine = 45
 
+darkClass = '<div class="darkClass"><p class="notHome">Nicht zu Hause</p></div>'
+
 def getHtml():
     with open('website.html', 'r') as handle:
         lines = handle.readlines()
@@ -13,10 +15,8 @@ def getHtml():
 def checkHomeFiles():
     with open('max.bool', 'r') as handle:
         maxOnline = handle.readline() == 'True'
-        print(maxOnline)
     with open('alex.bool', 'r') as handle:
         alexOnline = handle.readline() == 'True'
-        print(alexOnline)
     return maxOnline, alexOnline
         
 
@@ -29,10 +29,16 @@ class MyServer(BaseHTTPRequestHandler):
         self.send_header('Content-type', 'text/html')
         self.end_headers()
         for index, line in enumerate(htmlFile):
-            if maxOnline and index == insertLine:
-                self.wfile.write(bytes('<p id="title">Maexchen ist Home</p>', 'utf-8'))
-            if alexOnline and index == insertLine:
-                self.wfile.write(bytes('<p id="title">Alex ist Home</p>', 'utf-8'))
+            
+            if line == '<!--Add darkClass, Max-->':
+                if not maxOnline:
+                    self.wfile.write(bytes(darkClass, 'utf-8'))
+                continue
+            elif line == '<!--Add darkClass, Alex-->':
+                if not alexOnline:
+                    self.wfile.write(bytes(darkClass, 'utf-8'))
+                continue
+
             self.wfile.write(bytes(line, 'utf-8'))
 
 
