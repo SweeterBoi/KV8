@@ -14,8 +14,8 @@ def checkHomeFiles():
     with open('max.bool', 'r') as handle:
         print(handle.readline())
         maxOnline = bool(handle.readline())
-        print(maxOnline)
     with open('alex.bool', 'r') as handle:
+        print(handle.readline())
         alexOnline = bool(handle.readline())
     return maxOnline, alexOnline
         
