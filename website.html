@@ -1,50 +1,101 @@
 <!DOCTYPE html>
-<html>
-
-<head>
-    <style>
+<html><head><style>
         :root {
-            --background: #2C363F;
-            --accentRed: #E75A7C;
-            --content: #EDF2EF;
-            --contentTransparent: rgb(237,242,239,.6);
-            --accentYellow: #FEA82F;
-            --accentBlue: #3F88C5;
+            --background: #11151C;
+            --content: #212D40;
+            --contentTransparent: rgb(33, 45, 64, .6);
+            --accent1: #364156;
+            --accent2: #7D4E57;
+            --accent3: #D66853;
         }
-
         body {
-            background-color: var(--accentRed);
-            background-image: url("https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg");
+            background-color: var(--background);
+            /*background-image: url("https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg");*/
             background-repeat: no-repeat;
             background-attachment: fixed;
             background-size: cover;
-            padding: 5%;
+            padding-left: 10%;
+            padding-right: 10%;
+            padding-top: 1%;
+            padding-bottom: 1%;
         }
-
         #mainField {
             background-color: var(--contentTransparent);
-            border: 8px solid var(--accentBlue);
+            border: 1px solid var(--accent2);
             border-radius: 1px;
-            padding: 10%;
+            padding-left: 10%;
+            padding-right: 10%;
+            padding-top: 2%;
+            padding-bottom: 2%;
             width: 80%;
             height: 80%;
-            
-
+            display: inline-flex;
+            overflow: hidden;
+            justify-content: space-evenly;
         }
-        #title {
+        .title {
             text-align: center;
             font-size: 300%;
-            font-weight: 300;
-            color: var(--accentBlue);
+            font-weight: bold;
+            color: var(--accent3);
+            font-family: 'Segoe UI';
         }
-    </style>
-    <link rel="stylesheet" href="stylesheet.css">
-</head>
+        .notHome {
+            text-align:center;
+            font-size: 300%;
+            font-weight: bold;
+            color: var(--accent3);
+            font-family: 'Segoe UI';
+        }
+        .card {
+            border: 2px solid var(--accent3);
+            padding: 10px;
+            width: max-content;
+            display: inline-block;
+        }
+        .cardImage {
+            padding: 200px;
+            background-repeat: no-repeat;
+            background-size: contain;
+        }
+        .nameCard {
+            text-align: center;
+            font-size: 300%;
+            color: var(--accent3);
+            font-family: 'Segoe UI';
 
+        }
+        .darkClass {
+            background-color: var(--accent1);
+            filter: alpha(opacity=50);
+            /* IE */
+            opacity: 0.5;
+            /* Safari, Opera */
+            -moz-opacity: 0.50;
+            /* FireFox */
+            z-index: 20;
+            height: 103%;
+            width: 106%;
+            position:relative;
+            top: -85%;
+            left: -3%;
+        }
+    </style></head>
 <body>
+    <p class="title">Wer ist zu Hause</p>
     <div id="mainField">
-        <p id="title">Who even is a home? Right?</p>
+        <div class="card" style="background-color: var(--content);">
+            <div class="cardImage", style="background-image:url('https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg');">
+            </div>
+            <p class="nameCard">Maexchen</p>
+<!--Add darkClass, Max-->
+        </div>
+        <div class="card" style="background-color: var(--content);">
+            <div class="cardImage"
+                style="overflow: hidden;background-image:url('https://images.pexels.com/photos/1005058/pexels-photo-1005058.jpeg');">
+            </div>
+            <p class="nameCard">Alex</p>
+<!--Add darkClass, Alex-->
+        </div>
     </div>
-</body>
-
-</html>
+</body></html>
