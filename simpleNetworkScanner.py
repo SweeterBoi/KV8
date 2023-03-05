@@ -1,5 +1,5 @@
 '''
-This script defines finctions utilised to scan the network for connected
+This script defines functions utilised to scan the network for connected
 devices and check them against known devices of users
 '''
 import subprocess
