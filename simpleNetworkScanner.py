@@ -17,9 +17,7 @@ with open('alex_devices','r') as handle:
 def getIpAdresses():
     # Execute the linux command 'ip add'
     ipResponse = str(subprocess.Popen(['ip add'], shell=True, stdout=subprocess.PIPE).stdout.read())
-    # Find all valid ip addresses using regex
-    ips = re.findall(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,3}',ipResponse)
-    return ips
+    return re.findall(r'(?:[0-9]{1,3}\.){3}[0-9]{1,3}/[0-9]{1,3}',ipResponse)
 
 # Use the network mapping tool nmap to get all the network devices connected to
 # the network specified by the given ip address
@@ -50,11 +48,7 @@ def scanNetwork(verbose=False):
         print(f'IP Adresses: {ips}')
     # Ethernet is the second ip returned, do nmap scan
     devices = nmap(ips[1])
-    deviceNames = []
-    # get all devices in a list
-    for device in devices:
-        deviceNames.append(device.split(' ')[0])
-    return deviceNames
+    return [device.split(' ')[0] for device in devices]
 
 # Method checks for all devices in the network and then checks them against the
 # known devices for each person

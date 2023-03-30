@@ -1,0 +1,126 @@
+\documentclass[12pt]{article}
+
+\usepackage{a4wide}
+\usepackage{graphics}
+\usepackage{amsmath, amssymb, amsthm} 
+\usepackage{epsfig}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[ngerman]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage[style=numeric,backend=biber,sorting=none]{biblatex} 
+\addbibresource{ref.bib} 
+
+\title{KV8: Elektronische Steuerung mit Python unter Linux}
+\author{Alexander Baberz, Maximilian Janik}
+
+\begin{document}
+
+\maketitle
+\thispagestyle{empty}
+
+\begin{abstract}
+  In diesem Versuch wurde ein Raspberry Pi 400 benutzt um einen Netzwerkscanner aufzusetzen, der das lokale Netzwerk nach
+  verbundenen Geräten scannt und daraus ableitet wer, der beiden Autor:innen zu Hause ist. Über eine simple Website lässt
+  sich der aktuelle status abfragen.
+\end{abstract}
+
+\section{Einleitung}
+Das Ziel des Versuches besteht darin, die Leistungsfähigkeit des Raspberry Pi~\cite{raspi} zu evaluieren, die Programmierkenntnisse in Python zu erweitern und exemplarische Anwendungen des Raspberry Pi zu realisieren.
+
+Der Raspberry Pi stellt einen vollwertigen Bürocomputer mit umfangreicher Ausstattung, inklusive Tastatur, Maus, Bildschirm und Internetzugang dar. Er nutzt das Linux-Betriebssystem und verfügt über vier Prozessorkerne, welche Multitasking-Anwendungen unterstützen, um unterschiedliche Programme gleichzeitig auszuführen, ohne nennenswerte Geschwindigkeitseinbußen zu erleiden. Der Raspberry Pi stellt außerdem zahlreiche frei zugängliche Schnittstellen (GPIO und USB) zur Verfügung und ist damit auch für die elektronische Entwicklung, insbesondere unter der Verwendung von Python, geeignet. Die Anwendungsbereiche des Raspberry Pi sind vielfältig und können beispielsweise für kleine Elektronik-Experimente, wie der Aufnahme und Visualisierung von Messdaten mit einem Temperatursensor, genutzt werden.
+
+Im Rahmen des Praktikums sollen die Grundlagen des Raspberry Pi vermittelt und erste kleine Projekte umgesetzt werden. Hierbei sollen zunächst grundlegende Erfahrungen mithilfe einer Experimentierplatine mit USB/Seriell-Wandler und anschließend mit dem Raspberry Pi gesammelt werden. Dabei bietet sich die Möglichkeit, Projekte nach eigenen Interessen auszuwählen und individuelle Schwerpunkte zu setzen.
+
+\newpage
+\section{Theoretische Grundlagen}
+
+\subsection*{Nmap}
+
+Nmap~\cite{NMAP} (Network Mapper) ist ein Open-Source-Tool zur Netzwerk-Exploration und -Sicherheitsbewertung. Es ist in der Lage, Informationen über Hosts und Dienste in einem Netzwerk zu sammeln, indem es verschiedene Techniken wie Port-Scanning, OS-Erkennung, Versionserkennung und Service-Erkennung einsetzt. Das Tool kann auf verschiedenen Betriebssystemen ausgeführt werden und unterstützt eine Vielzahl von Scan-Optionen und -Techniken, die es Benutzer:innen ermöglichen, das Verhalten des Scans anzupassen. Nmap ist bekannt für seine Fähigkeit, versteckte Hosts und Dienste zu erkennen, die normalerweise schwer zu entdecken sind, und wird häufig von Sicherheitsforscher:innen und -professionellen eingesetzt, um Schwachstellen in Netzwerken aufzudecken und Sicherheitslücken zu schließen.
+
+In diesem Projekt wird der Befehl $nmap -sn 192.168.xx.xx/24$ benutzt. Im Folgenden wird der Befehl erklärt.
+
+
+Eine wichtige Funktion von Netzwerk-Scanning-Tools wie Nmap besteht darin, Informationen über die Geräte in einem Netzwerk zu sammeln. Eine häufig verwendete Option bei Nmap-Scans ist die Option -sn (auch als Ping-Scan bezeichnet), die verwendet wird, um festzustellen, welche Hosts im Netzwerk aktiv sind. Diese Option kann mit verschiedenen Argumenten wie IP-Adressen, IP-Bereichen oder CIDR-Notationen~\cite{CIDR} verwendet werden, um bestimmte Teile des Netzwerks zu scannen.
+
+Wenn die CIDR-Notation verwendet wird, wird normalerweise die IP-Adresse des Netzwerks und eine Subnetzmaske angegeben. In diesem Kontext gibt eine Subnetzmaske an, wie viele Bits der IP-Adresse dem Netzwerkanteil zugeordnet sind und wie viele Bits dem Hostanteil zugeordnet sind. Eine häufig verwendete Notation ist "192.168.x.x/24", wobei die Subnetzmaske 24 Bits oder 3 Oktette angibt.
+
+In einem Nmap-Scan mit der Option -sn und der CIDR-Notation "192.168.x.x/24" wird Nmap die IP-Adressen von allen Hosts scannen, die Teil des Netzwerks sind, das durch die IP-Adresse "192.168.x.x" und die Subnetzmaske "255.255.255.0" definiert wird. Das bedeutet, dass Nmap nach Hosts im Bereich von "192.168.x.0" bis "192.168.x.255" suchen wird. Wenn ein Host aktiv ist und auf ICMP-Echo-Anforderungen (Pings)~\cite{ICMP} antwortet, wird Nmap ihn als "up" markieren und eine kurze Zusammenfassung der Ergebnisse ausgeben.
+
+Die CIDR-Notation "192.168.x.x/24" ist nützlich, wenn ein Administrator schnell herausfinden möchte, welche Hosts im lokalen Netzwerk aktiv sind. Da das lokale Netzwerk normalerweise klein ist und nur wenige Subnetzwerksegmente hat, ist es einfach, alle Hosts im Netzwerk mit dieser Notation zu scannen. Eine genauere Überprüfung der einzelnen Hosts und ihrer offenen Ports erfordert jedoch weitere Nmap-Optionen und -Argumente.
+
+Insgesamt ist die CIDR-Notation "192.168.x.x/24" ein nützliches Werkzeug für Netzwerkadministratoren, um schnell und einfach herauszufinden, welche Hosts im Netzwerk aktiv sind. Es ist wichtig zu beachten, dass ein Nmap-Scan ohne Zustimmung des Netzwerkadministrators illegal sein kann und dass es empfohlen wird, eine Zustimmung einzuholen, bevor ein solcher Scan durchgeführt wird.
+
+\newpage
+\section{Experimenteller Aufbau und Durchf\"uhrung}
+\subsection{Webserver}
+
+Es gibt mehrere Möglichkeiten, einen Webserver mit Python aufzusetzen. Eine Möglichkeit ist, die in Python integrierte Bibliothek "http.server"~\cite{http} zu verwenden, um einen einfachen Webserver zu starten. Diese Bibliothek ermöglicht es dem/der Entwickler:in, eine schnelle und einfache Möglichkeit zu haben, um statische Inhalte zu servieren.
+
+Eine weitere Möglichkeit besteht darin, einen Webserver-Framework wie Flask~\cite{flask} oder Django~\cite{django} zu verwenden, die es dem Entwickler ermöglichen, leistungsfähigere Webanwendungen zu erstellen, die dynamische Inhalte generieren und Datenbanken verwenden können. Diese Frameworks bieten viele Funktionen und Plugins, die dem/der Entwickler:in helfen, eine robuste Webanwendung zu erstellen.
+
+Ein weiterer Ansatz besteht darin, einen bereits vorhandenen Webserver wie Apache~\cite{apache} oder NGINX~\cite{nginx} zu verwenden und ihn mit einem Python-Modul wie mod\_wsgi zu konfigurieren. Dies ermöglicht es dem/der Entwickler:in, eine leistungsfähige Webanwendung mit Python zu erstellen und dennoch die Vorteile eines etablierten Webservers zu nutzen.
+
+Jeder Ansatz hat seine Vor- und Nachteile. Die Verwendung von http.server ist schnell und einfach, aber es bietet nur begrenzte Funktionalität und ist nicht für den Einsatz in Produktionsumgebungen geeignet. Web-Frameworks wie Flask und Django sind leistungsfähiger und können eine Vielzahl von Anforderungen erfüllen, aber sie benötigen mehr Zeit und Kenntnisse zur Einrichtung und Konfiguration. Die Verwendung von bereits vorhandenen Webservern in Kombination mit mod\_wsgi kann eine gute Balance zwischen Leistung und Skalierbarkeit bieten, aber die Konfiguration erfordert auch etwas Erfahrung und Wissen über Webserver-Technologien.
+
+Insgesamt hängt die Wahl der besten Methode zur Einrichtung eines Web-Servers in Python von den spezifischen Anforderungen des Projekts ab, einschließlich der erwarteten Anzahl von Benutzer:innen, der Art der bereitgestellten Inhalte und der Komplexität der Funktionalität.
+
+Da die Anforderungen an den Webserver in diesem Fall absehbar gering ist, wurde die Python-native Bibliothek "http.server" verwendet um den Aufwand gering zu halten.
+
+\subsection{Portforwarding}
+
+Port Forwarding ist ein Verfahren, das verwendet wird, um Netzwerkdienste von einem öffentlichen Netzwerk auf ein privates Netzwerk weiterzuleiten~\cite{portforward}. Dies wird typischerweise verwendet, um Dienste wie Webserver, FTP-Server oder Gaming-Server, die sich in einem privaten Netzwerk befinden, für das Internet zugänglich zu machen. Dabei wird eine eingehende Netzwerkanforderung an einen bestimmten Port des öffentlichen Netzwerks an eine interne IP-Adresse und einen bestimmten Port im privaten Netzwerk weitergeleitet.
+
+Die Einrichtung von Port Forwarding erfolgt in der Regel über die Konfiguration des Routers, der das öffentliche Netzwerk verwaltet. Dabei wird dem Router mitgeteilt, welcher Port für welche interne IP-Adresse und Portnummer weitergeleitet werden soll. Diese Konfiguration kann entweder über das Web-Interface des Routers oder über spezielle Software erfolgen. Es gibt viele verschiedene Router-Modelle, daher kann die Einrichtung von Port Forwarding je nach Modell variieren.
+
+
+\subsection{Codebase}
+
+Die Codebase ist auf Github unter \url{https://github.com/Sweeterboi/KV8} oder via $git~clone~https://github.com/SweeterBoi/KV8.git$ heruntergeladen werden.
+
+\subsubsection{simpleNetworkscanner.py}
+Das Skript definiert eine Python-Codebasis, die für das Scannen von Netzwerken und die Überprüfung der angeschlossenen Geräte gegen bekannte Geräte von Benutzern konzipiert ist. Die Implementierung verwendet die Linux-Befehle $ip~add$ und $nmap$ sowie reguläre Ausdrücke, um die IP-Adressen der Geräte zu ermitteln und eine Liste der angeschlossenen Geräte zurückzugeben. Das Skript liest auch Listen von bekannten Geräten für jeden Benutzer aus Dateien, die auf der Festplatte gespeichert sind.
+
+Die Funktion $getIpAdresses()$ ruft den Befehl $ip~add$ auf und verwendet reguläre Ausdrücke, um alle gültigen IP-Adressen aus der Ausgabe des Befehls zu extrahieren. Die Funktion $nmap()$ verwendet das Tool $nmap$, um eine Liste aller Geräte abzurufen, die mit einem bestimmten Netzwerk verbunden sind, das durch die IP-Adresse angegeben ist. Die Funktion $scanNetwork()$ ruft $getIpAdresses()$ auf, um die IP-Adressen des Netzwerks zu erhalten, und verwendet dann $nmap()$, um die Liste der angeschlossenen Geräte zu erhalten.
+
+Die Funktion $checkWhoIsHome()$ ruft $scanNetwork()$ auf, um eine Liste der angeschlossenen Geräte zu erhalten, und vergleicht diese Liste dann mit den Listen der bekannten Geräte für jede:n Benutzer:in, um festzustellen, ob einer der Benutzer:innen zu Hause ist. Die Funktion gibt dann eine Liste der gefundenen bekannten Geräte für jeden Benutzer zurück.
+
+Schließlich gibt es eine Funktion $verboseOutput()$, die für Testzwecke eine umfassende Konsolenausgabe bietet. Wenn das Skript als eigenständige Datei ausgeführt wird, wird $verboseOutput()$ ausgeführt. Andernfalls werden die Funktionen lediglich als Module importiert.
+
+\subsubsection{checkService.py}
+
+Dieses Skript definiert einen laufenden Service, der das Netzwerk auf die Verbindungsstatus von Benutzergeräten überwacht und feststellt, ob die Benutzer derzeit zu Hause sind oder nicht. Die Ausgabe wird in $.bool$-Dateien geschrieben. Der Service wird beim Start des Raspberry Pi automatisch über einen Crontab gestartet~\cite{crontab}.
+
+Das Skript verwendet das Modul $simpleNetworkScanner$ zum Überprüfen, wer zu Hause ist. Es prüft, ob Benutzergeräte mit dem Netzwerk verbunden sind. Wenn mindestens eines der erkannten Geräte eines Benutzers angemeldet ist, wird der Benutzer als zu Hause erkannt.
+
+Es gibt einen Schwellenwert dafür, wie lange ein Benutzer nicht mit dem Netzwerk verbunden sein muss, um als offline zu gelten. Dieser Schwellenwert wird in Sekunden angegeben.
+
+Das Skript führt einen Endlosschleife aus, die unterbrochen wird, wenn es mit $Ctrl+C$ unterbrochen wird. In jeder Iteration wird der Verbindungsstatus jedes Benutzers geprüft, indem das simpleNetworkScanner-Modul aufgerufen wird. Der Zeitpunkt der letzten Anmeldung jedes Benutzers wird in einer Datei gespeichert. Wenn ein Benutzer als offline erkannt wird und die Zeit seit der letzten Anmeldung größer als der Schwellenwert ist, wird der Benutzer als offline markiert. Andernfalls wird der Benutzer als online markiert und die Zeit der letzten Anmeldung wird aktualisiert.
+
+Das Skript schreibt den Status jedes Benutzers in eine separate $.bool$-Datei. Wenn der Benutzer als online erkannt wird, wird der Wert $True$ in die Datei geschrieben, andernfalls wird der Wert $False$ geschrieben.
+
+\subsubsection{webserver.py}
+
+Dieses Skript definiert einen Webserver, der eine einfache HTML-Seite bereitstellt, auf der angezeigt wird, ob die Autor:innen innerhalb der letzten 5 Minuten in das WLAN zuhause eingeloggt waren. Auch dieses Script wird beim Start des Raspberry Pi automatisch gestartet. Es verwendet das Modul $simpleNetworkScanner$, um die eigene IP-Adresse zu finden, die dann als IP-Adresse für den Webserver verwendet wird. Das Skript öffnet eine HTML-Datei und gibt sie als Liste von Zeilen zurück. Außerdem überprüft es Dateien, die speichern, ob die spezifizierte Person zuhause ist oder nicht, und gibt ein Tupel von Booleans zurück, wobei jeder Wert $True$ ist, wenn die Person zuhause ist, und $False$, wenn nicht. Das Skript definiert eine Klasse, die einen Webserver darstellt. Wenn eine Anfrage vom Client gestellt wird, ruft die Klasse die Funktion auf, die die beiden Personen zuhause überprüft, holt sich die HTML-Datei und fügt die Zeile $darkClass$ in die HTML-Datei ein, um das Namecard der Autor:innen auszugrauen, wenn sie nicht zu Hause sind. Der Webserver wird auf der eigenen IP-Adresse und Port 80 erstellt und ausgeführt, bis er durch einen Konsoleneingriff gestoppt wird.
+
+\newpage
+\section{Ergebnisse}
+Die Implementierung des Netzwerk-Scanners und der dazugehörigen Website war erfolgreich. Der Scanner wurde automatisch beim Hochfahren des Raspberry Pi gestartet und lieferte zuverlässige Ergebnisse über die aktiven Geräte im Netzwerk. Die Ergebnisse des Scans wurden in einer Textdatei gespeichert und konnten einfach ausgelesen werden.
+
+Die Website bietet eine einfache Möglichkeit, den Status des Scans anzuzeigen. Sie ist benutzerfreundlich gestaltet und kann über einen beliebigen Webbrowser aufgerufen werden.
+
+Die Ergebnisse des Netzwerk-Scans waren präzise und genau. Der Scanner konnte alle aktiven Geräte im Netzwerk erkennen und identifizieren. Anhand der MAC-Adressen der Geräte wurde es möglich, herauszufinden, wer von beiden Autor:innen zu Hause war und wer nicht. Das System konnte die erkannten Geräte auch benennen, so dass es einfach war, die verschiedenen Geräte zu unterscheiden.
+
+\section{Diskussion}
+
+Der Versuch hat gezeigt, dass der Raspberry Pi ein leistungsstarkes Werkzeug für die Netzwerk-Exploration und -Sicherheitsbewertung ist. Der Einsatz von Nmap in Kombination mit dem Raspberry Pi ermöglicht es, Netzwerke schnell und effizient zu scannen. Die Programmierung des Netzwerk-Scanners in Python war einfach und unkompliziert, so dass auch Personen mit geringeren Programmierkenntnissen das Projekt umsetzen könnten. Mit Hilfe der öffentlichen Codebase sollte dies trivial sein, wobei die größte Hürde sicherlich ggf. fehlende Linux-Kenntnisse darstellen, da Linux ein wenig verbreitetes Betriebssystem unter Endnutzer:innen ist.
+
+\newpage
+\thispagestyle{empty}
+\printbibliography
+
+\clearpage
+
+\end{document}
